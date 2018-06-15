@@ -44,7 +44,6 @@ export default class GroupCards extends React.Component {
     } else {
       displayColumns = columns;
     }
-    console.info('display---', displayColumns)
 
     const dataSource = [];
     groups.map(group => {

@@ -14,7 +14,12 @@ export default class FixturesList extends React.Component {
       round.matches.map(match => {
         match.team1.avatar = this.getAvatar(match.team1.name);
         match.team2.avatar = this.getAvatar(match.team2.name);
-        match.time = moment(`${match.date}T${match.time}+03`)
+        match.sortTime = `${match.date}T${match.time}`;
+        match.time = moment(
+          `${match.date}T${match.time}+0${match.timezone.substr(
+            match.timezone.indexOf("+") + 1
+          )}`
+        )
           .tz(moment.tz.guess())
           .format("DD MMM YYYY hh:mmA z");
         if (match.score1 !== null) {
@@ -22,6 +27,7 @@ export default class FixturesList extends React.Component {
         } else matches.push(match);
       });
     });
+    matches.sort((a, b) => new Date(a.sortTime) - new Date(b.sortTime));
     return (
       <Collapse bordered={false} defaultActiveKey={["2"]}>
         <Collapse.Panel header="Results">
@@ -99,13 +105,17 @@ export default class FixturesList extends React.Component {
             ) : (
               <Row>
                 <Col xs={24} lg={8}>
-                  {item.goals1.map(goal => (
-                    <b>
-                      <i>
-                        {goal.name}:{goal.minute}{" "}
-                      </i>
-                    </b>
-                  ))}
+                  <div>{`Match Date: ${item.date}`}</div>
+                  <div>
+                    Scorers:{" "}
+                    {item.goals1.map(goal => (
+                      <b>
+                        <i>
+                          {goal.name}:{goal.minute}{" "}
+                        </i>
+                      </b>
+                    ))}
+                  </div>
                 </Col>
                 <Col xs={24} lg={{ span: 8, offset: 8 }}>
                   {item.goals2.map(goal => (

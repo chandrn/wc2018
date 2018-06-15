@@ -52,8 +52,6 @@ export default class GroupCards extends React.Component {
       });
     });
 
-    console.log("datasource---", dataSource);
-
     const mappedGroups = groups.map((group, index) => (
       <Col xs={24} lg={8}>
         <Card title={group.name}>

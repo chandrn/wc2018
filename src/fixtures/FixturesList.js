@@ -22,7 +22,6 @@ export default class FixturesList extends React.Component {
         } else matches.push(match);
       });
     });
-    console.log("matches--", completedMatches);
     return (
       <Collapse bordered={false} defaultActiveKey={["2"]}>
         <Collapse.Panel header="Results">

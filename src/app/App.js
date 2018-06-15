@@ -35,10 +35,10 @@ class App extends Component {
               className="header"
             >
               <Row className="logo">
-                <Col span={8}>
+                <Col lg={8} xs={16}>
                   <h3>FIFA World cup 2018 Fixtures and Results</h3>
                 </Col>
-                <Col span={8} offset={8}>
+                <Col lg={{span:8, offset: 8}} xs={8}>
                   <h3>
                     <a href="https://github.com/chandrn/wc2018" target="_blank">
                       <Icon type="github" />

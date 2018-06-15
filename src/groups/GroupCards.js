@@ -37,6 +37,15 @@ export default class GroupCards extends React.Component {
       }
     ];
 
+    let displayColumns = []
+
+    if(window.screen.width < 768) {
+      displayColumns.push(columns[0], columns[5]);
+    } else {
+      displayColumns = columns;
+    }
+    console.info('display---', displayColumns)
+
     const dataSource = [];
     groups.map(group => {
       group.standings.map((standing, index) => {
@@ -57,7 +66,7 @@ export default class GroupCards extends React.Component {
         <Card title={group.name}>
           <div style={{overflow: 'auto'}}>
             <Table
-              columns={columns}
+              columns={displayColumns}
               dataSource={dataSource.slice(index * 4, (index + 1) * 4)}
               pagination={false}
               scroll={{x: 'auto'}}

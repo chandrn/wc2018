@@ -10,6 +10,7 @@ export default class FixturesList extends React.Component {
     const fixtures = this.props.fixtures;
     const matches = [];
     const completedMatches = [];
+    const liveMatches = [];
     fixtures.rounds.map(round => {
       round.matches.map(match => {
         match.team1.avatar = this.getAvatar(match.team1.name);
@@ -22,8 +23,15 @@ export default class FixturesList extends React.Component {
         )
           .tz(moment.tz.guess())
           .format("DD MMM YYYY hh:mmA z");
-        if (match.score1 !== null) {
+        match.isCurrent = moment(match.sortTime).isBetween(
+          moment(),
+          moment().subtract({ hours: "02" })
+        );
+        match.isBefore = moment(match.sortTime).isBefore(moment());
+        if (match.score1 !== null || (!match.isCurrent && match.isBefore)) {
           completedMatches.push(match);
+        } else if (match.isCurrent) {
+          liveMatches.push(match);
         } else matches.push(match);
       });
     });
@@ -37,6 +45,15 @@ export default class FixturesList extends React.Component {
             renderItem={item => this.renderListItem(item)}
           />
         </Collapse.Panel>
+        {liveMatches.length !== 0 && (
+          <Collapse.Panel header="Fixtures" key="2">
+            <List
+              itemLayout="horizontal"
+              dataSource={liveMatches}
+              renderItem={item => this.renderListItem(item)}
+            />
+          </Collapse.Panel>
+        )}
         <Collapse.Panel header="Fixtures" key="2">
           <List
             itemLayout="horizontal"

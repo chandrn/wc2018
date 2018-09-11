@@ -15,7 +15,8 @@ export default class FixturesList extends React.Component {
       round.matches.map(match => {
         match.team1.avatar = this.getAvatar(match.team1.name);
         match.team2.avatar = this.getAvatar(match.team2.name);
-        match.sortTime = `${match.date}T${match.time}`;
+        match.sortTime = `${match.date}T${match.time}+0${match.timezone.substr(match.timezone.indexOf("+") + 1)}`;
+        console.log(match.team1.name + '----' + match.sortTime)
         match.time = moment(
           `${match.date}T${match.time}+0${match.timezone.substr(
             match.timezone.indexOf("+") + 1
@@ -23,11 +24,11 @@ export default class FixturesList extends React.Component {
         )
           .tz(moment.tz.guess())
           .format("DD MMM YYYY hh:mmA z");
-        match.isCurrent = moment(match.sortTime).isBetween(
+        match.isCurrent = moment(match.time).isBetween(
           moment(),
           moment().subtract({ hours: "02" })
         );
-        match.isBefore = moment(match.sortTime).isBefore(moment());
+        match.isBefore = moment(match.time).isBefore(moment());
         if (match.score1 !== null || (!match.isCurrent && match.isBefore)) {
           completedMatches.push(match);
         } else if (match.isCurrent) {
@@ -125,7 +126,7 @@ export default class FixturesList extends React.Component {
                   <div>{`Match Date: ${item.date}`}</div>
                   <div>
                     Scorers:{" "}
-                    {item.goals1.map(goal => (
+                    {item.goals1 && item.goals1.map(goal => (
                       <b>
                         <i>
                           {goal.name}:{goal.minute}{" "}
@@ -135,7 +136,7 @@ export default class FixturesList extends React.Component {
                   </div>
                 </Col>
                 <Col xs={24} lg={{ span: 8, offset: 8 }}>
-                  {item.goals2.map(goal => (
+                  {item.goals2 && item.goals2.map(goal => (
                     <b>
                       <i>
                         {goal.name}:{goal.minute}{" "}
